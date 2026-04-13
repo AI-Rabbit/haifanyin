@@ -578,34 +578,6 @@ html {
   transform: scale(1.01);
 }
 
-/* ============ Home sub-nav ============ */
-.home-subnav-item {
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.home-subnav-item::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 1.5px;
-  background: oklch(0.45 0.12 260);
-  border-radius: 1px;
-  transition: all 0.25s ease;
-  transform: translateX(-50%);
-}
-
-.home-subnav-item:hover::after,
-.home-subnav-item.active::after {
-  width: 60%;
-}
-
-.dark .home-subnav-item::after {
-  background: oklch(0.65 0.10 220);
-}
-
 /* ============ Sparkline mini-chart ============ */
 .sparkline-bar {
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);

@@ -9,7 +9,7 @@ import {
   FileText, Briefcase, Menu, X, ArrowUp,
   Globe, School, BookMarked, Sparkles, Moon, Sun,
   Calendar, Copy, Check, Clock, Filter, Download,
-  Quote, Hash, Command, Library, Microscope, Zap,
+  Quote, Command, Library, Microscope, Zap,
   Heart, ArrowRight, Braces, ArrowUpDown, SortAsc, SortDesc,
   TrendingUp, BarChart3, Tag, HomeIcon, Camera, Rss
 } from 'lucide-react'
@@ -367,68 +367,6 @@ function PubStatsBar() {
         </div>
       </div>
     </motion.div>
-  )
-}
-
-// ============ Home Sub-Nav ============
-function HomeSubNav() {
-  const [activeSection, setActiveSection] = useState<string>('home')
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['about', 'teaching']
-      let current = 'home'
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 160) {
-            current = id
-          }
-        }
-      }
-      setActiveSection(current)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id)
-    if (el) {
-      const offset = 80
-      const y = el.getBoundingClientRect().top + window.pageYOffset - offset
-      window.scrollTo({ top: y, behavior: 'smooth' })
-    }
-  }
-
-  const items = [
-    { id: 'about', label: 'About' },
-    { id: 'teaching', label: 'Teaching' },
-  ]
-
-  return (
-    <div className="sticky top-16 md:top-20 z-40 bg-background/80 backdrop-blur-xl border-b border-border/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex items-center gap-1 py-1.5" aria-label="Page sections">
-          {items.map((item, i) => (
-            <span key={item.id} className="flex items-center">
-              {i > 0 && <span className="text-muted-foreground/30 mx-1 text-[10px]">·</span>}
-              <button
-                onClick={() => scrollToSection(item.id)}
-                className={`home-subnav-item px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                  activeSection === item.id
-                    ? 'text-primary bg-primary/5'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                }`}
-              >
-                {item.label}
-              </button>
-            </span>
-          ))}
-        </nav>
-      </div>
-    </div>
   )
 }
 
@@ -1554,9 +1492,6 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
 // ============ Teaching Section ============
 function TeachingSection() {
   const teachingData = professorInfo.teaching || []
-  const allPubs = [...journalPapers, ...conferencePapers]
-  const yearDist = getYearDistribution(allPubs)
-  const maxCount = Math.max(...yearDist.map(d => d.count))
 
   return (
     <SectionWrapper id="teaching" className="bg-muted/30">
@@ -1592,28 +1527,10 @@ function TeachingSection() {
             </div>
           </motion.div>
 
-          {/* Publication Year Distribution Mini-Chart */}
           <motion.div variants={fadeInUp}>
             <Card className="border-border/60 overflow-hidden">
               <CardContent className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Hash className="w-4 h-4 text-primary/50" />
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Publication Timeline</h3>
-                </div>
-                <div className="flex items-end gap-1.5 h-28">
-                  {yearDist.map((d) => (
-                    <div key={d.year} className="flex-1 flex flex-col items-center gap-1">
-                      <span className="text-[9px] text-muted-foreground/60 tabular-nums">{d.count}</span>
-                      <div
-                        className="w-full rounded-t-sm bg-gradient-to-t from-primary/40 to-primary/20 hover:from-primary/60 hover:to-primary/30 transition-colors cursor-default min-h-[4px]"
-                        style={{ height: `${(d.count / maxCount) * 80}px` }}
-                        title={`${d.year}: ${d.count} papers`}
-                      />
-                      <span className="text-[9px] text-muted-foreground/50 tabular-nums">{d.year.slice(2)}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 pt-3 border-t border-border/40 grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <div className="text-center">
                     <div className="text-lg font-bold tracking-tight">{journalPapers.length}</div>
                     <div className="text-[10px] text-muted-foreground">Journal</div>
@@ -1764,7 +1681,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
 
   return (
     <main>
-      <HomeSubNav />
       <HeroSection onNavigate={onNavigate} />
       <SectionDivider />
       <AboutSection />
@@ -1872,7 +1788,7 @@ function TeamPage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
                 <h2 className="text-xl font-bold tracking-tight">Team Album</h2>
                 <p className="text-sm text-muted-foreground mt-1">Our team members and research highlights</p>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 {albumPhotos.map((photo, i) => (
                   <motion.div
                     key={i}
@@ -1881,12 +1797,12 @@ function TeamPage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
                     transition={{ duration: 0.3, delay: i * 0.03 }}
                     className="group relative"
                   >
-                    <div className="aspect-square rounded-xl overflow-hidden border border-border/60 hover:shadow-lg transition-all duration-300 hover:border-primary/30">
+                    <div className="aspect-[4/3] rounded-xl overflow-hidden border border-border/60 hover:shadow-lg transition-all duration-300 hover:border-primary/30">
                       <Image
                         src={publicAsset(photo.src)}
                         alt={photo.caption}
-                        width={200}
-                        height={200}
+                        width={640}
+                        height={480}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
