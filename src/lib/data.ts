@@ -29,6 +29,7 @@ export interface Student {
   papers?: { citation: string; link?: string }[];
   coSupervised?: string;
   graduated?: boolean;
+  destination?: string;
 }
 
 // ==================== BIO ====================
@@ -588,6 +589,7 @@ export const graduatedPhdStudents: Student[] = [
     avatar: "/avatars/ziao-qin.jpg",
     degree: "phd",
     graduated: true,
+    destination: "Huawei",
     awards: ["Merit Student"],
     researchTopics: ["FDD", "Massive MIMO"],
     papers: [
@@ -605,6 +607,7 @@ export const graduatedPhdStudents: Student[] = [
     avatar: "/avatars/weidong-li.jpg",
     degree: "phd",
     graduated: true,
+    destination: "Huaian University",
     awards: ["National First Prize of National University Bio-networking Technology and Application \"Three Innovations\" Competition"],
     researchTopics: ["Mobility of Massive MIMO"],
     papers: [
@@ -613,8 +616,7 @@ export const graduatedPhdStudents: Student[] = [
       { citation: 'W. Li, H. Yin, Z. Qin, Y. Cao, and M. Debbah, "A multi-dimensional matrix pencil-based channel prediction method for massive MIMO with mobility," IEEE TWC, vol. 22, no. 4, pp. 2215-2230, Apr. 2023.' },
       { citation: 'Y. Cao, H. Yin, Z. Qin, W. Li, W. Wu, and M. Debbah, "A manifold learning-based CSI feedback framework for FDD massive MIMO," arXiv:2304.14598, Apr. 2023.', link: "https://arxiv.org/abs/2304.14598" },
     ],
-  },
-];
+  },];
 
 export const graduatedMasterStudents: Student[] = [
   {
@@ -624,6 +626,7 @@ export const graduatedMasterStudents: Student[] = [
     avatar: "/avatars/zhibo-zhou.jpg",
     degree: "master",
     graduated: true,
+    destination: "Huawei",
     coSupervised: "Prof. Yingzhuang Liu",
     awards: ['Gold Award of the 7th "Internet+" Competition', "Merit Student"],
     researchTopics: ["Massive MIMO", "Random matrix theory"],

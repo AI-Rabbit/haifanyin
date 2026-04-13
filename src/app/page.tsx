@@ -1273,12 +1273,12 @@ function StudentCard({ student }: { student: Student }) {
       <Card className={`overflow-hidden border-border/60 hover:shadow-lg transition-all duration-300 h-full student-card-accent ${degreeClass} student-card-hover`}>
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
-            <div className="w-16 aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
+            <div className="w-16 aspect-[3/4] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
               <Image
                 src={publicAsset(student.avatar)}
                 alt={student.name}
                 width={64}
-                height={48}
+                height={85}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1289,19 +1289,18 @@ function StudentCard({ student }: { student: Student }) {
                   {student.name}
                   <span className="text-muted-foreground font-normal ml-1.5">({student.nameCn})</span>
                 </h4>
-                {student.graduated ? (
-                  <Badge className="text-[10px] px-2 py-0 border bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/15 dark:text-amber-400 dark:border-amber-800/25">
-                    Graduated
-                  </Badge>
-                ) : (
-                  <Badge
-                    className={`text-[10px] px-2 py-0 border ${
-                      isPhd
-                        ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/15 dark:text-rose-400 dark:border-rose-800/25'
-                        : 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/15 dark:text-teal-400 dark:border-teal-800/25'
-                    }`}
-                  >
-                    {isPhd ? 'Ph.D.' : 'Master'}
+                <Badge
+                  className={`text-[10px] px-2 py-0 border ${
+                    isPhd
+                      ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/15 dark:text-rose-400 dark:border-rose-800/25'
+                      : 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/15 dark:text-teal-400 dark:border-teal-800/25'
+                  }`}
+                >
+                  {isPhd ? 'Ph.D.' : 'Master'}
+                </Badge>
+                {student.graduated && student.destination && (
+                  <Badge className="text-[10px] px-2 py-0 border bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/15 dark:text-blue-400 dark:border-blue-800/25">
+                    → {student.destination}
                   </Badge>
                 )}
               </div>
@@ -1837,15 +1836,19 @@ function TeamPage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
                     transition={{ duration: 0.3, delay: i * 0.03 }}
                     className="group relative"
                   >
-                    <div className="aspect-[4/3] rounded-xl overflow-hidden border border-border/60 hover:shadow-lg transition-all duration-300 hover:border-primary/30">
-                      <Image
-                        src={publicAsset(photo.src)}
-                        alt={photo.caption}
-                        width={640}
-                        height={480}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                   <div className={`rounded-xl overflow-hidden border border-border/60 hover:shadow-lg transition-all duration-300 hover:border-primary/30 ${
+                       photo.category === 'Ph.D.' || photo.category === 'Master' || photo.category === 'Professor' 
+                         ? 'aspect-[3/4]' 
+                         : 'aspect-[4/3]'
+                     }`}>
+                       <Image
+                         src={publicAsset(photo.src)}
+                         alt={photo.caption}
+                         width={640}
+                         height={853}
+                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                       />
+                     </div>
                     <div className="mt-2 px-1">
                       <p className="text-xs font-medium truncate">{photo.caption}</p>
                       <Badge variant="secondary" className="text-[9px] mt-0.5 bg-primary/5 text-primary/60 border-primary/10">
