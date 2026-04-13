@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   keywords: ["Haifan Yin", "尹海帆", "Massive MIMO", "RIS", "5G", "6G", "Signal Processing", "HUST", "Professor"],
   authors: [{ name: "Haifan Yin" }],
   icons: {
-    icon: `${assetBase}/logo.svg`,
+    icon: `${assetBase}/sitelogo.jpg`,
   },
 };
 

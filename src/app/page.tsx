@@ -437,16 +437,6 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
                 )}
               </button>
             ))}
-            <div className="w-px h-5 bg-border mx-2" />
-            <a
-              href={professorInfo.googleScholar}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all flex items-center gap-1.5"
-            >
-              <School className="w-4 h-4" />
-              Scholar
-            </a>
             <button
               onClick={toggleDarkMode}
               className="ml-1 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
