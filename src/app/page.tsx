@@ -262,7 +262,7 @@ function PageHero({ page }: { page: Exclude<PageName, 'home'> }) {
         <div className="hero-orb-2 absolute bottom-[10%] right-[5%] w-[300px] h-[300px] rounded-full bg-primary/3 blur-3xl" />
         <div className="hero-orb-3 absolute top-[40%] left-[50%] w-[150px] h-[150px] rounded-full bg-accent/4 blur-3xl" />
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 min-w-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -280,7 +280,7 @@ function PageHero({ page }: { page: Exclude<PageName, 'home'> }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
-          className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed ml-16"
+          className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed md:ml-16"
         >
           {info.subtitle}
         </motion.p>
@@ -288,7 +288,7 @@ function PageHero({ page }: { page: Exclude<PageName, 'home'> }) {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-          className="decorative-line w-20 mt-4 ml-16"
+          className="decorative-line w-20 mt-4 md:ml-16"
         />
       </div>
     </div>
@@ -314,9 +314,9 @@ function PubStatsBar() {
       className="mb-6"
     >
       <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-8 min-w-0">
           {/* Stats */}
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
                 <FileText className="w-4 h-4 text-primary/60" />
@@ -950,7 +950,7 @@ function PublicationItem({ pub, index, type }: { pub: Publication; index: number
       <div className="flex gap-3 py-3.5 px-3 rounded-lg hover:bg-accent/50 transition-colors">
         <span className="pub-number text-xs mt-1 flex-shrink-0 tabular-nums">[{index + 1}]</span>
         <div className="flex-1 min-w-0">
-          <p className="text-sm leading-relaxed">
+          <p className="text-sm leading-relaxed break-words [overflow-wrap:anywhere]">
             {pub.authors.split(',').map((author, i) => {
               const trimmed = author.trim()
               if (trimmed === 'H. Yin') {
@@ -1078,7 +1078,7 @@ function PublicationsSection({ fullPage = false, hideTitle = false }: { fullPage
 
   return (
     <SectionWrapper id="publications" className="dot-pattern">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         {!hideTitle && (
           <SectionTitle subtitle="Selected publications in top-tier journals and conferences">
             Publications
@@ -1103,46 +1103,51 @@ function PublicationsSection({ fullPage = false, hideTitle = false }: { fullPage
               <span className="text-[9px]">⌘</span>K
             </kbd>
           </div>
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-            <div className="flex gap-1 overflow-x-auto custom-scrollbar pb-1" style={{ maxWidth: 'calc(100vw - 3rem)' }}>
-              {allYears.map((year) => (
-                <button
-                  key={year}
-                  onClick={() => setYearFilter(year)}
-                  className={`px-2.5 py-1 text-xs rounded-md transition-all ${
-                    yearFilter === year
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground'
-                  }`}
-                >
-                  {year === 'all' ? 'All' : year}
-                </button>
-              ))}
+          <div className="flex flex-col gap-2 min-w-0 sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              <div className="flex gap-1 overflow-x-auto custom-scrollbar pb-1 min-w-0 flex-1">
+                {allYears.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setYearFilter(year)}
+                    className={`px-2.5 py-1 text-xs rounded-md transition-all shrink-0 ${
+                      yearFilter === year
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                  >
+                    {year === 'all' ? 'All' : year}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="w-px h-5 bg-border mx-1" />
-            <button
-              onClick={() => setSortDesc(!sortDesc)}
-              className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
-              title={sortDesc ? 'Sort: Newest first' : 'Sort: Oldest first'}
-            >
-              {sortDesc ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}
-            </button>
-            {activeTab !== 'patents' && (
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="w-px h-5 bg-border mx-1 hidden sm:block" />
               <button
-                onClick={handleDownloadBibTeX}
+                onClick={() => setSortDesc(!sortDesc)}
                 className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
-                title="Download BibTeX"
+                title={sortDesc ? 'Sort: Newest first' : 'Sort: Oldest first'}
               >
-                <Download className="w-4 h-4" />
+                {sortDesc ? <SortDesc className="w-4 h-4" /> : <SortAsc className="w-4 h-4" />}
               </button>
-            )}
+              {activeTab !== 'patents' && (
+                <button
+                  onClick={handleDownloadBibTeX}
+                  className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
+                  title="Download BibTeX"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
 
-        <motion.div variants={fadeInUp}>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-6">
+        <motion.div variants={fadeInUp} className="min-w-0">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="min-w-0">
+            <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain pb-1 -mx-0.5 px-0.5 sm:mx-0 sm:px-0">
+              <TabsList className="mb-6 w-max min-w-full justify-between sm:w-fit sm:min-w-0 sm:justify-center">
               <TabsTrigger value="journal" className="gap-1.5">
                 <BookOpen className="w-4 h-4" />
                 Journal Papers
@@ -1159,6 +1164,7 @@ function PublicationsSection({ fullPage = false, hideTitle = false }: { fullPage
                 <Badge variant="secondary" className="ml-1 text-xs">{patents.length}</Badge>
               </TabsTrigger>
             </TabsList>
+            </div>
 
             <TabsContent value="journal">
               <div className="bg-card rounded-xl border border-border/60 overflow-hidden shadow-sm">
@@ -1193,7 +1199,7 @@ function PublicationsSection({ fullPage = false, hideTitle = false }: { fullPage
                     {patents.map((patent, i) => (
                       <motion.div key={i} variants={staggerItem} className="flex gap-2 py-1.5 text-sm">
                         <span className="pub-number text-xs mt-0.5 flex-shrink-0">[{i + 1}]</span>
-                        <span className="text-muted-foreground">{patent}</span>
+                        <span className="text-muted-foreground break-words [overflow-wrap:anywhere]">{patent}</span>
                       </motion.div>
                     ))}
                   </div>
