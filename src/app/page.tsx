@@ -1272,12 +1272,12 @@ function StudentCard({ student }: { student: Student }) {
       <Card className={`overflow-hidden border-border/60 hover:shadow-lg transition-all duration-300 h-full student-card-accent ${degreeClass} student-card-hover`}>
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
+            <div className="w-16 aspect-[4/3] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
               <Image
                 src={publicAsset(student.avatar)}
                 alt={student.name}
-                width={56}
-                height={56}
+                width={64}
+                height={48}
                 className="w-full h-full object-cover"
               />
             </div>

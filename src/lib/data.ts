@@ -569,7 +569,7 @@ export const researchTopics: ResearchTopic[] = [
     subtitle: "The Curse of Mobility",
     description:
       "Massive MIMO is one of the key enablers of the 5G cellular systems. Compared to traditional MIMO with fewer base station antennas, massive MIMO can offer unprecedented spectral efficiency gains. Despite the technology hype and great expectations, some of the latest field trials have unfortunately been disappointing when it comes to actual system performance in mobility scenarios. It was observed that moderate-mobility at 30 km/h leads to as much as 50% performance reduction versus low-mobility at 3 km/h.",
-    image: "/research-mimo.jpg",
+    image: "/research/research-mimo.jpg",
     papers: [
       {
         citation:
@@ -582,7 +582,7 @@ export const researchTopics: ResearchTopic[] = [
     title: "FDD Massive MIMO",
     description:
       "The acquisition of CSI in Frequency Division Duplex (FDD) massive MIMO has been a long-lasting problem. Unlike in TDD mode, the UL and DL channels in FDD are typically non-reciprocal. The traditional CSI feedback scheme suffers from two problems: 1) the time-frequency resource spent on reference signals increases quickly with the number of base station antennas; and 2) the CSI feedback is always corrupted by quantization errors.",
-    image: "/research-fdd.jpg",
+    image: "/research/research-fdd.jpg",
     papers: [
       {
         citation:
@@ -599,7 +599,7 @@ export const researchTopics: ResearchTopic[] = [
     title: "Pilot Contamination",
     description:
       "In reality, CSI is acquired on the basis of finite-length pilot sequences, and crucially, in the presence of inter-cell interference. Therefore, the pilot sequences from neighboring cells would contaminate each other. Pilot contamination constitutes a bottleneck for performance, thereby undermining the value of massive MIMO systems in cellular networks.",
-    image: "/research-pilot.jpg",
+    image: "/research/research-pilot.jpg",
     papers: [
       {
         citation:
@@ -635,7 +635,7 @@ export const researchTopics: ResearchTopic[] = [
     subtitle: "Prototyping & Modeling",
     description:
       "Reconfigurable Intelligent Surface (RIS) is a novel technique inspired by recent advances in electromagnetic metamaterials. Such metamaterials have unique electromagnetic properties that do not exist in nature, such as negative refraction, perfect absorption, and anomalous reflection/scattering. By varying the reflection coefficient of the elements on RIS, one can control towards which location an incident wave is beamformed. Due to the very low cost and power consumption, RIS is believed to be one of the key technologies for 5G+/6G.",
-    image: "/research-ris.jpg",
+    image: "/research/research-ris.jpg",
     papers: [
       {
         citation:
@@ -652,7 +652,7 @@ export const researchTopics: ResearchTopic[] = [
     title: "Superdirective Antenna Array",
     description:
       'In superdirective antenna arrays, the array gain (or directivity) can be proportional to M² (instead of M as in traditional antennas). To achieve this so-called "superdirectivity" however, the calculation of the excitation coefficients (beamforming vector) is known to be a challenging problem. We address this problem with a novel double coupling-based superdirective beamforming method. A prototype of the superdirective antenna array is developed. Electromagnetic simulations and real-world experiments validate the effectiveness of our proposed approaches, and superdirectivity is achieved in reality.',
-    image: "/research-antenna.jpg",
+    image: "/research/research-antenna.jpg",
     papers: [
       {
         citation:
