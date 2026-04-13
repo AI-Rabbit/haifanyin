@@ -1,11 +1,11 @@
 # GitHub Pages 部署工作流
-# 每次推送到 main 分支时自动构建并部署到 GitHub Pages
+# 每次推送到 main / master 分支时自动构建并部署到 GitHub Pages
 
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   # 允许手动触发
   workflow_dispatch:
 

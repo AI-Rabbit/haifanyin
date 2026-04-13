@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { getBasePath } from "@/lib/base-path";
+
+const assetBase = getBasePath();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
   keywords: ["Haifan Yin", "尹海帆", "Massive MIMO", "RIS", "5G", "6G", "Signal Processing", "HUST", "Professor"],
   authors: [{ name: "Haifan Yin" }],
   icons: {
-    icon: "/logo.svg",
+    icon: `${assetBase}/logo.svg`,
   },
 };
 
