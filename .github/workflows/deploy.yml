@@ -34,7 +34,14 @@ jobs:
         run: bun install
 
       - name: Build static site
-        run: bun run build
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          if echo "$REPO_NAME" | grep -qi '\.github\.io$'; then
+            export NEXT_PUBLIC_BASE_PATH=""
+          else
+            export NEXT_PUBLIC_BASE_PATH="/$REPO_NAME"
+          fi
+          bun run build
 
       - name: Add .nojekyll
         run: touch out/.nojekyll

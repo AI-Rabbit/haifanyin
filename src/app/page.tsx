@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { publicAsset } from '@/lib/base-path'
 import {
   professorInfo, journalPapers, conferencePapers, patents,
   researchTopics, phdStudents, masterStudents,
@@ -676,7 +677,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageName) => void }) {
             <div className="relative group">
               <div className="absolute -inset-1.5 bg-gradient-to-br from-[oklch(0.45_0.12_260)] to-[oklch(0.35_0.08_220)] rounded-2xl opacity-15 group-hover:opacity-25 transition-opacity blur-md" />
               <Image
-                src={professorInfo.photo}
+                src={publicAsset(professorInfo.photo)}
                 alt={`Photo of ${professorInfo.name}`}
                 width={288}
                 height={370}
@@ -1224,7 +1225,7 @@ function ResearchCard({ topic, index }: { topic: ResearchTopic; index: number })
         <div className="grid md:grid-cols-[320px_1fr] gap-0">
           <div className="relative h-52 md:h-auto md:min-h-[240px] overflow-hidden">
             <Image
-              src={topic.image}
+              src={publicAsset(topic.image)}
               alt={topic.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -1345,7 +1346,7 @@ function StudentCard({ student }: { student: Student }) {
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
               <Image
-                src={student.avatar}
+                src={publicAsset(student.avatar)}
                 alt={student.name}
                 width={56}
                 height={56}
@@ -1882,7 +1883,7 @@ function TeamPage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
                   >
                     <div className="aspect-square rounded-xl overflow-hidden border border-border/60 hover:shadow-lg transition-all duration-300 hover:border-primary/30">
                       <Image
-                        src={photo.src}
+                        src={publicAsset(photo.src)}
                         alt={photo.caption}
                         width={200}
                         height={200}
