@@ -29,6 +29,7 @@ import { publicAsset } from '@/lib/base-path'
 import {
   professorInfo, journalPapers, conferencePapers, patents,
   researchTopics, phdStudents, masterStudents,
+  graduatedPhdStudents, graduatedMasterStudents,
   type Publication, type ResearchTopic, type Student
 } from '@/lib/data'
 
@@ -1288,15 +1289,21 @@ function StudentCard({ student }: { student: Student }) {
                   {student.name}
                   <span className="text-muted-foreground font-normal ml-1.5">({student.nameCn})</span>
                 </h4>
-                <Badge
-                  className={`text-[10px] px-2 py-0 border ${
-                    isPhd
-                      ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/15 dark:text-rose-400 dark:border-rose-800/25'
-                      : 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/15 dark:text-teal-400 dark:border-teal-800/25'
-                  }`}
-                >
-                  {isPhd ? 'Ph.D.' : 'Master'}
-                </Badge>
+                {student.graduated ? (
+                  <Badge className="text-[10px] px-2 py-0 border bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/15 dark:text-amber-400 dark:border-amber-800/25">
+                    Graduated
+                  </Badge>
+                ) : (
+                  <Badge
+                    className={`text-[10px] px-2 py-0 border ${
+                      isPhd
+                        ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/15 dark:text-rose-400 dark:border-rose-800/25'
+                        : 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/15 dark:text-teal-400 dark:border-teal-800/25'
+                    }`}
+                  >
+                    {isPhd ? 'Ph.D.' : 'Master'}
+                  </Badge>
+                )}
               </div>
 
               {student.coSupervised && (
@@ -1397,12 +1404,13 @@ function StudentCard({ student }: { student: Student }) {
 function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
   const [topicFilter, setTopicFilter] = useState<string>('all')
 
+  const allStudents = useMemo(() => [...phdStudents, ...masterStudents, ...graduatedPhdStudents, ...graduatedMasterStudents], [])
+
   const allTopics = useMemo(() => {
     const topics = new Set<string>()
-    phdStudents.forEach(s => s.researchTopics.forEach(t => topics.add(t)))
-    masterStudents.forEach(s => s.researchTopics.forEach(t => topics.add(t)))
+    allStudents.forEach(s => s.researchTopics.forEach(t => topics.add(t)))
     return ['all', ...Array.from(topics).sort()]
-  }, [])
+  }, [allStudents])
 
   const filteredPhd = useMemo(() => {
     if (topicFilter === 'all') return phdStudents
@@ -1413,6 +1421,18 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
     if (topicFilter === 'all') return masterStudents
     return masterStudents.filter(s => s.researchTopics.includes(topicFilter))
   }, [topicFilter])
+
+  const filteredGraduatedPhd = useMemo(() => {
+    if (topicFilter === 'all') return graduatedPhdStudents
+    return graduatedPhdStudents.filter(s => s.researchTopics.includes(topicFilter))
+  }, [topicFilter])
+
+  const filteredGraduatedMaster = useMemo(() => {
+    if (topicFilter === 'all') return graduatedMasterStudents
+    return graduatedMasterStudents.filter(s => s.researchTopics.includes(topicFilter))
+  }, [topicFilter])
+
+  const graduatedTotal = filteredGraduatedPhd.length + filteredGraduatedMaster.length
 
   return (
     <SectionWrapper id="students" className="dot-pattern">
@@ -1474,6 +1494,36 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
             <div className="text-center py-8 text-muted-foreground text-sm">No Master students match the selected topic.</div>
           )}
         </motion.div>
+
+        {graduatedTotal > 0 && (
+          <motion.div variants={fadeInUp} className="mt-10 pt-8 border-t border-border/40">
+            <div className="flex items-center gap-2.5 mb-5">
+              <Award className="w-5 h-5 text-amber-500/70" />
+              <h3 className="text-lg font-semibold">Graduated Students</h3>
+              <Badge variant="secondary" className="text-xs bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/15 dark:text-amber-400 dark:border-amber-800/25">{graduatedTotal}</Badge>
+            </div>
+            {filteredGraduatedPhd.length > 0 && (
+              <div className="mb-6">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Ph.D.</p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredGraduatedPhd.map((student) => (
+                    <StudentCard key={student.email} student={student} />
+                  ))}
+                </div>
+              </div>
+            )}
+            {filteredGraduatedMaster.length > 0 && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Master</p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredGraduatedMaster.map((student) => (
+                    <StudentCard key={student.email} student={student} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
       </div>
     </SectionWrapper>
   )

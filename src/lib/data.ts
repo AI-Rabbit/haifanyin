@@ -28,6 +28,7 @@ export interface Student {
   patents?: string[];
   papers?: { citation: string; link?: string }[];
   coSupervised?: string;
+  graduated?: boolean;
 }
 
 // ==================== BIO ====================
@@ -577,100 +578,16 @@ export const researchTopics: ResearchTopic[] = [
       },
     ],
   },
-  {
-    id: "fdd-mimo",
-    title: "FDD Massive MIMO",
-    description:
-      "The acquisition of CSI in Frequency Division Duplex (FDD) massive MIMO has been a long-lasting problem. Unlike in TDD mode, the UL and DL channels in FDD are typically non-reciprocal. The traditional CSI feedback scheme suffers from two problems: 1) the time-frequency resource spent on reference signals increases quickly with the number of base station antennas; and 2) the CSI feedback is always corrupted by quantization errors.",
-    image: "/research/research-fdd.jpg",
-    papers: [
-      {
-        citation:
-          'H. Yin, and D. Gesbert, "A partial channel reciprocity-based codebook for wideband FDD massive MIMO," IEEE Transactions on Wireless Communications, vol. 21, no. 9, pp. 7696-7710, Sept. 2022.',
-      },
-      {
-        citation:
-          'Z. Qin, H. Yin, Y. Cao, W. Li, and D. Gesbert, "A partial reciprocity-based channel prediction framework for FDD massive MIMO with high mobility," IEEE Transactions on Wireless Communications, vol. 21, no. 11, pp. 9638-9652, Nov. 2022.',
-      },
-    ],
-  },
-  {
-    id: "pilot-contamination",
-    title: "Pilot Contamination",
-    description:
-      "In reality, CSI is acquired on the basis of finite-length pilot sequences, and crucially, in the presence of inter-cell interference. Therefore, the pilot sequences from neighboring cells would contaminate each other. Pilot contamination constitutes a bottleneck for performance, thereby undermining the value of massive MIMO systems in cellular networks.",
-    image: "/research/research-pilot.jpg",
-    papers: [
-      {
-        citation:
-          'H. Yin, D. Gesbert, M. Filippou, and Y. Liu, "A coordinated approach to channel estimation in large-scale multiple-antenna systems," IEEE JSAC, Vol. 31, No. 2, pp. 264-273, Feb. 2013.',
-      },
-      {
-        citation:
-          'H. Yin, L. Cottatellucci, D. Gesbert, R. R. Muller, and G. He, "Robust pilot decontamination based on joint angle and power domain discrimination," IEEE TSP, Vol. 64, No. 11, pp. 2990-3003, Jun. 2016.',
-      },
-      {
-        citation:
-          'H. Yin, D. Gesbert, and L. Cottatellucci, "Dealing with interference in distributed large-scale MIMO systems: A statistical approach," IEEE JSTSP, Vol. 8, No. 5, pp. 942-953, Oct. 2014.',
-      },
-    ],
-    blogPosts: [
-      {
-        title: "The low-rankness property of massive MIMO channels",
-        link: "https://haifanyin.wordpress.com/2016/07/27/low-rankness-post/",
-      },
-      {
-        title: "Pilot decontamination in angular domain",
-        link: "https://haifanyin.wordpress.com/2016/08/01/pilot-decontamination-in-angular-domain/",
-      },
-      {
-        title: "Pilot decontamination in joint angle and power domain",
-        link: "https://haifanyin.wordpress.com/2016/08/16/pilot-decontamination-in-joint-angle-and-power-domain/",
-      },
-    ],
-  },
-  {
-    id: "ris",
-    title: "Reconfigurable Intelligent Surface",
-    subtitle: "Prototyping & Modeling",
-    description:
-      "Reconfigurable Intelligent Surface (RIS) is a novel technique inspired by recent advances in electromagnetic metamaterials. Such metamaterials have unique electromagnetic properties that do not exist in nature, such as negative refraction, perfect absorption, and anomalous reflection/scattering. By varying the reflection coefficient of the elements on RIS, one can control towards which location an incident wave is beamformed. Due to the very low cost and power consumption, RIS is believed to be one of the key technologies for 5G+/6G.",
-    image: "/research/research-ris.jpg",
-    papers: [
-      {
-        citation:
-          'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE Transactions on Communications, vol. 69, no. 12, pp. 8627-8640, Dec. 2021.',
-      },
-      {
-        citation:
-          'Z. Wang, L. Tan, H. Yin, K. Wang, X. Pei, and D. Gesbert, "A received power model for reconfigurable intelligent surface and measurement-based validations," IEEE SPAWC 2021, Lucca, Italy. (Invited)',
-      },
-    ],
-  },
-  {
-    id: "superdirective",
-    title: "Superdirective Antenna Array",
-    description:
-      'In superdirective antenna arrays, the array gain (or directivity) can be proportional to M² (instead of M as in traditional antennas). To achieve this so-called "superdirectivity" however, the calculation of the excitation coefficients (beamforming vector) is known to be a challenging problem. We address this problem with a novel double coupling-based superdirective beamforming method. A prototype of the superdirective antenna array is developed. Electromagnetic simulations and real-world experiments validate the effectiveness of our proposed approaches, and superdirectivity is achieved in reality.',
-    image: "/research/research-antenna.jpg",
-    papers: [
-      {
-        citation:
-          'L. Han, H. Yin, M. Gao, J. Xie, "A superdirective beamforming approach with impedance coupling and field coupling for compact antenna arrays," arXiv:2302.08203, Feb. 2023.',
-        link: "https://arxiv.org/abs/2302.08203",
-      },
-    ],
-  },
 ];
 
-// ==================== STUDENTS ====================
-export const phdStudents: Student[] = [
+export const graduatedPhdStudents: Student[] = [
   {
     name: "Ziao Qin",
     nameCn: "秦子翱",
     email: "ziao_qin@hust.edu.cn",
     avatar: "/avatars/ziao-qin.jpg",
     degree: "phd",
+    graduated: true,
     awards: ["Merit Student"],
     researchTopics: ["FDD", "Massive MIMO"],
     papers: [
@@ -687,6 +604,7 @@ export const phdStudents: Student[] = [
     email: "l1369582713@163.com",
     avatar: "/avatars/weidong-li.jpg",
     degree: "phd",
+    graduated: true,
     awards: ["National First Prize of National University Bio-networking Technology and Application \"Three Innovations\" Competition"],
     researchTopics: ["Mobility of Massive MIMO"],
     papers: [
@@ -696,6 +614,24 @@ export const phdStudents: Student[] = [
       { citation: 'Y. Cao, H. Yin, Z. Qin, W. Li, W. Wu, and M. Debbah, "A manifold learning-based CSI feedback framework for FDD massive MIMO," arXiv:2304.14598, Apr. 2023.', link: "https://arxiv.org/abs/2304.14598" },
     ],
   },
+];
+
+export const graduatedMasterStudents: Student[] = [
+  {
+    name: "Zhibo Zhou",
+    nameCn: "周志博",
+    email: "1959907954@qq.com",
+    avatar: "/avatars/zhibo-zhou.jpg",
+    degree: "master",
+    graduated: true,
+    coSupervised: "Prof. Yingzhuang Liu",
+    awards: ['Gold Award of the 7th "Internet+" Competition', "Merit Student"],
+    researchTopics: ["Massive MIMO", "Random matrix theory"],
+  },
+];
+
+// ==================== STUDENTS ====================
+export const phdStudents: Student[] = [
   {
     name: "Xilong Pei",
     nameCn: "裴熙隆",
@@ -827,16 +763,6 @@ export const masterStudents: Student[] = [
       { citation: 'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE TWC, Dec. 2021.' },
       { citation: 'Z. Wang, L. Tan, H. Yin, K. Wang, X. Pei, and D. Gesbert, "A received power model for reconfigurable intelligent surface and measurement-based validations," IEEE SPAWC 2021, Lucca, Italy. (Invited)' },
     ],
-  },
-  {
-    name: "Zhibo Zhou",
-    nameCn: "周志博",
-    email: "1959907954@qq.com",
-    avatar: "/avatars/zhibo-zhou.jpg",
-    degree: "master",
-    coSupervised: "Prof. Yingzhuang Liu",
-    awards: ['Gold Award of the 7th "Internet+" Competition', "Merit Student"],
-    researchTopics: ["Massive MIMO", "Random matrix theory"],
   },
   {
     name: "Jichu Zhou",
