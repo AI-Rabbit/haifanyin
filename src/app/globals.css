@@ -45,6 +45,8 @@
 
 :root {
   --radius: 0.625rem;
+  --back-to-top-stop1: oklch(0.45 0.12 260);
+  --back-to-top-stop2: oklch(0.60 0.10 220);
   --background: oklch(0.995 0.001 240);
   --foreground: oklch(0.16 0.02 260);
   --card: oklch(1 0 0);
@@ -79,6 +81,8 @@
 }
 
 .dark {
+  --back-to-top-stop1: oklch(0.70 0.10 220);
+  --back-to-top-stop2: oklch(0.55 0.14 260);
   --background: oklch(0.13 0.01 260);
   --foreground: oklch(0.93 0.01 240);
   --card: oklch(0.18 0.01 260);
@@ -208,6 +212,22 @@ html {
 .dark .decorative-line {
   background: linear-gradient(90deg, oklch(0.55 0.10 220), oklch(0.40 0.08 200), transparent);
 }
+
+/* Accent decorative lines */
+.decorative-line-blue { height: 3px; background: linear-gradient(90deg, oklch(0.55 0.15 250), oklch(0.65 0.12 220), transparent); border-radius: 2px; }
+.dark .decorative-line-blue { background: linear-gradient(90deg, oklch(0.60 0.14 250), oklch(0.50 0.10 220), transparent); }
+
+.decorative-line-emerald { height: 3px; background: linear-gradient(90deg, oklch(0.55 0.15 160), oklch(0.65 0.12 140), transparent); border-radius: 2px; }
+.dark .decorative-line-emerald { background: linear-gradient(90deg, oklch(0.60 0.14 160), oklch(0.50 0.10 140), transparent); }
+
+.decorative-line-violet { height: 3px; background: linear-gradient(90deg, oklch(0.55 0.18 300), oklch(0.65 0.15 280), transparent); border-radius: 2px; }
+.dark .decorative-line-violet { background: linear-gradient(90deg, oklch(0.60 0.16 300), oklch(0.50 0.12 280), transparent); }
+
+.decorative-line-amber { height: 3px; background: linear-gradient(90deg, oklch(0.70 0.15 80), oklch(0.75 0.12 70), transparent); border-radius: 2px; }
+.dark .decorative-line-amber { background: linear-gradient(90deg, oklch(0.65 0.14 80), oklch(0.55 0.10 70), transparent); }
+
+.decorative-line-rose { height: 3px; background: linear-gradient(90deg, oklch(0.60 0.17 10), oklch(0.65 0.14 350), transparent); border-radius: 2px; }
+.dark .decorative-line-rose { background: linear-gradient(90deg, oklch(0.55 0.15 10), oklch(0.50 0.12 350), transparent); }
 
 /* Section background patterns */
 .section-pattern {
@@ -587,6 +607,37 @@ html {
   filter: brightness(1.3);
 }
 
+/* ============ Particle float animation ============ */
+@keyframes particle-float {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(15px, -25px); }
+  50% { transform: translate(-20px, 15px); }
+  75% { transform: translate(25px, 20px); }
+}
+
+/* ============ Progress bar animated ============ */
+.progress-bar-animated {
+  transition: width 0.15s ease-out;
+}
+
+/* ============ Student card avatar hover ============ */
+.student-card-hover .student-avatar-img {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.student-card-hover:hover .student-avatar-img {
+  transform: scale(1.06);
+}
+
+/* ============ Dot indicator ============ */
+.dot-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dot-indicator:hover {
+  opacity: 0.8;
+}
+
 /* ============ Typewriter cursor ============ */
 .typewriter-cursor {
   display: inline-block;
@@ -619,4 +670,200 @@ html {
 
 .dark .research-tag-hover:hover {
   box-shadow: 0 2px 8px oklch(0.65 0.10 220 / 0.15);
+}
+
+/* ============ Hero Gradient Mesh Background ============ */
+.hero-mesh-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, oklch(0.45 0.12 260 / 0.12), transparent),
+    radial-gradient(ellipse 500px 500px at 80% 60%, oklch(0.50 0.10 220 / 0.08), transparent),
+    radial-gradient(ellipse 400px 300px at 50% 80%, oklch(0.55 0.08 200 / 0.06), transparent),
+    radial-gradient(ellipse 300px 400px at 70% 20%, oklch(0.40 0.06 280 / 0.05), transparent);
+  animation: mesh-shift 25s ease-in-out infinite alternate;
+}
+
+.dark .hero-mesh-bg {
+  opacity: 0.25;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 30%, oklch(0.55 0.10 220 / 0.10), transparent),
+    radial-gradient(ellipse 500px 500px at 80% 60%, oklch(0.50 0.08 200 / 0.07), transparent),
+    radial-gradient(ellipse 400px 300px at 50% 80%, oklch(0.60 0.06 180 / 0.05), transparent),
+    radial-gradient(ellipse 300px 400px at 70% 20%, oklch(0.45 0.05 260 / 0.04), transparent);
+}
+
+@keyframes mesh-shift {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%;
+  }
+  33% {
+    background-position: 15% 10%, 85% 85%, 40% 60%, 65% 35%;
+  }
+  66% {
+    background-position: 5% 20%, 90% 70%, 60% 40%, 75% 15%;
+  }
+  100% {
+    background-position: 10% 5%, 80% 90%, 45% 55%, 70% 25%;
+  }
+}
+
+/* ============ Print-Friendly Styles ============ */
+@media print {
+  /* Hide non-essential UI */
+  header,
+  .ticker-animate,
+  .ticker-animate ~ *,
+  .back-to-top,
+  .hero-orb-1, .hero-orb-2, .hero-orb-3,
+  .particle-float,
+  [class*="particle"],
+  .section-divider,
+  .page-hero-gradient .absolute,
+  .fixed {
+    display: none !important;
+  }
+
+  /* White backgrounds, black text */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Remove dark mode overrides */
+  .dark, .dark * {
+    background: white !important;
+    color: black !important;
+    border-color: #ddd !important;
+  }
+
+  /* Show all collapsed content */
+  .overflow-hidden,
+  [style*="max-height"] {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Show link URLs after links */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+  }
+  a[href^="#"]::after,
+  a[href^="mailto"]::after {
+    content: none;
+  }
+
+  /* Page breaks */
+  section {
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  /* Remove animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============ Command Palette ============ */
+.command-palette-results {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.80 0.01 240) transparent;
+}
+
+.command-palette-results::-webkit-scrollbar {
+  width: 5px;
+}
+
+.command-palette-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.command-palette-results::-webkit-scrollbar-thumb {
+  background-color: oklch(0.80 0.01 240);
+  border-radius: 10px;
+}
+
+.dark .command-palette-results {
+  scrollbar-color: oklch(0.35 0.01 260) transparent;
+}
+
+.dark .command-palette-results::-webkit-scrollbar-thumb {
+  background-color: oklch(0.35 0.01 260);
+}
+
+/* ============ Card Shimmer Hover Effect ============ */
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    oklch(0.97 0.01 240 / 0.3) 45%,
+    oklch(0.97 0.01 240 / 0.6) 50%,
+    oklch(0.97 0.01 240 / 0.3) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.dark .card-shimmer::after {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    oklch(0.45 0.05 260 / 0.15) 45%,
+    oklch(0.45 0.05 260 / 0.3) 50%,
+    oklch(0.45 0.05 260 / 0.15) 55%,
+    transparent 60%
+  );
+}
+
+.card-shimmer:hover::after {
+  transform: translateX(100%);
+}
+
+/* ============ About Section Bio Enhancement ============ */
+.bio-text-highlight {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    oklch(0.80 0.08 260 / 0.06) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: bio-shimmer 8s ease-in-out infinite;
+}
+
+@keyframes bio-shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
 }
