@@ -32,7 +32,7 @@ import {
   professorInfo, journalPapers, conferencePapers, patents,
   researchTopics, phdStudents, masterStudents,
   graduatedPhdStudents, graduatedMasterStudents,
-  patentBreakdown, citationStats,
+  patentBreakdown, citationStats, getStudentFirstAuthorPapers,
   type Publication, type ResearchTopic, type Student
 } from '@/lib/data'
 
@@ -676,6 +676,16 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
   const navItems: { id: PageName; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: 'home', label: 'Home', icon: HomeIcon },
     { id: 'research', label: 'Research', icon: Microscope },
@@ -688,75 +698,15 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
   const handleNav = (page: PageName) => {
     onNavigate(page)
     setMobileOpen(false)
+    // Scroll to top after navigation
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    })
   }
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-background/90 dark:bg-neutral-900/90 shadow-sm border-b border-border/50'
-          : 'bg-background/60 dark:bg-neutral-900/60'
-      }`}
-      style={{ backdropFilter: scrolled ? 'blur(16px)' : 'blur(8px)', WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'blur(8px)' }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <button onClick={() => handleNav('home')} className="flex items-center group">
-            <Image
-                src="/MCSP_LAB_logo.svg"
-                alt="MCSP Lab"
-                width={200}
-                height={22}
-                className="h-10 md:h-14 w-auto object-contain"
-                priority
-              />
-          </button>
-
-          <nav className="hidden md:flex items-center gap-0.5">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNav(item.id)}
-                className={`relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                  currentPage === item.id
-                    ? 'text-primary bg-primary/5'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                {item.label}
-                {currentPage === item.id && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary"
-                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </button>
-            ))}
-            <button
-              onClick={toggleDarkMode}
-              className="ml-1 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
-              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-          </nav>
-
-          <div className="flex md:hidden items-center gap-1">
-            <button onClick={toggleDarkMode} className="p-2 rounded-lg hover:bg-accent transition-colors">
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg hover:bg-accent transition-colors">
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
+    <>
+      {/* Mobile Drawer - rendered OUTSIDE the header to avoid stacking context issues with backdrop-filter */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -778,16 +728,7 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
               className="md:hidden fixed top-0 right-0 bottom-0 z-[70] w-[280px] max-w-[80vw] bg-background border-l border-border/60 shadow-2xl flex flex-col"
             >
               {/* Drawer Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-border/40">
-                <div className="flex items-center">
-                  <Image
-                    src="/MCSP_LAB_logo.svg"
-                    alt="MCSP Lab"
-                    width={160}
-                    height={18}
-                    className="h-10 w-auto object-contain"
-                  />
-                </div>
+              <div className="flex items-center justify-end px-4 py-3 border-b border-border/40">
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="p-1.5 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
@@ -837,6 +778,73 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
           </>
         )}
       </AnimatePresence>
+      {/* Main Header */}
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-background/90 dark:bg-neutral-900/90 shadow-sm border-b border-border/50'
+            : 'bg-background/60 dark:bg-neutral-900/60'
+        }`}
+        style={{ backdropFilter: scrolled ? 'blur(16px)' : 'blur(8px)', WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'blur(8px)' }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <button onClick={() => handleNav('home')} className="flex items-center group">
+              <Image
+                  src="/MCSP_LAB_logo.svg"
+                  alt="MCSP Lab"
+                  width={200}
+                  height={22}
+                  className="h-13 md:h-14 w-auto object-contain max-w-[240px] md:max-w-none"
+                  priority
+                />
+            </button>
+
+            <nav className="hidden md:flex items-center gap-0.5">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNav(item.id)}
+                className={`relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                  currentPage === item.id
+                    ? 'text-primary bg-primary/5'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.label}
+                {currentPage === item.id && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary"
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
+            <button
+              onClick={toggleDarkMode}
+              className="ml-1 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+          </nav>
+
+          <div className="flex md:hidden items-center gap-1">
+            <button onClick={toggleDarkMode} className="p-2 rounded-lg hover:bg-accent transition-colors">
+              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg hover:bg-accent transition-colors">
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Scroll Progress Bar */}
       <div className="h-[2px] w-full bg-transparent">
         <div
@@ -845,55 +853,11 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
         />
       </div>
     </motion.header>
+    </>
   )
 }
 
-// ============ Mobile Bottom Tab Bar ============
-function MobileBottomNav({ currentPage, onNavigate }: { currentPage: PageName; onNavigate: (page: PageName) => void }) {
-  const tabs: { id: PageName; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'home', label: 'Home', icon: HomeIcon },
-    { id: 'research', label: 'Research', icon: Microscope },
-    { id: 'publications', label: 'Papers', icon: BookOpen },
-    { id: 'team', label: 'Team', icon: Users },
-    { id: 'teaching', label: 'Teaching', icon: GraduationCap },
-    { id: 'gallery', label: 'Gallery', icon: Camera },
-  ]
 
-  return (
-    <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-background/90 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] dark:shadow-[0_-2px_10px_rgba(0,0,0,0.2)]"
-      style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-    >
-      <div className="flex items-center justify-around px-1 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-        {tabs.map((tab) => {
-          const isActive = currentPage === tab.id
-          const Icon = tab.icon
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onNavigate(tab.id)}
-              className={`flex flex-col items-center justify-center gap-0.5 py-1.5 px-2 rounded-lg min-w-[56px] transition-all duration-200 ${
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground/70 active:text-foreground'
-              }`}
-            >
-              <Icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`} />
-              <span className={`text-[10px] leading-tight font-medium ${isActive ? 'font-semibold' : ''}`}>{tab.label}</span>
-              {isActive && (
-                <motion.div
-                  layoutId="mobileBottomNav"
-                  className="absolute -top-px left-3 right-3 h-0.5 rounded-full bg-primary"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                />
-              )}
-            </button>
-          )
-        })}
-      </div>
-    </nav>
-  )
-}
 
 // ============ News Ticker ============
 const topicGradientMap: Record<string, string> = {
@@ -1096,6 +1060,7 @@ function HeroSection({ onNavigate }: { onNavigate: (page: PageName) => void }) {
               <ContactDialog />
               {[
                 { icon: School, label: 'Google Scholar Profile', href: professorInfo.googleScholar, external: true },
+                { icon: FileText, label: 'IEEE Xplore', href: 'https://ieeexplore.ieee.org/author/38493026100', external: true },
                 { icon: Globe, label: 'Chinese Site', href: professorInfo.chineseSite.url, external: true },
               ].map((link, i) => (
                 <a
@@ -1420,11 +1385,11 @@ function PublicationItem({ pub, index, type }: { pub: Publication; index: number
         <div className="flex-1 min-w-0">
           <p className="text-sm leading-relaxed break-words [overflow-wrap:anywhere]">
             {pub.authors.split(',').map((author, i) => {
-              const trimmed = author.trim()
-              if (trimmed === 'H. Yin') {
-                return <strong key={i} className="text-foreground">{i > 0 ? ', ' : ''}{trimmed}</strong>
+              const name = author.trim()
+              if (name === 'Haifan Yin') {
+                return <strong key={i} className="text-foreground">{i > 0 ? ', ' : ''}{name}</strong>
               }
-              return <span key={i} className="text-muted-foreground">{i > 0 ? ', ' : ''}{trimmed}</span>
+              return <span key={i} className="text-muted-foreground">{i > 0 ? ', ' : ''}{name}</span>
             })}
             , &ldquo;<span className="text-foreground/90">{pub.title}</span>,&rdquo;{' '}
             <em className="text-muted-foreground">{pub.venue}</em>, {pub.year}.
@@ -1838,7 +1803,7 @@ function PublicationsSection({ fullPage = false, hideTitle = false }: { fullPage
             <TabsContent value="patents">
               <div className="bg-card rounded-xl border border-border/60 overflow-hidden shadow-sm">
                 <div className={`${fullPage ? '' : 'max-h-[800px]'} overflow-y-auto custom-scrollbar p-5`}>
-                  <div className="grid sm:grid-cols-2 gap-x-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
                     {patents.map((patent, i) => (
                       <motion.div key={i} variants={staggerItem} className="flex gap-2 py-1.5 text-sm">
                         <span className="pub-number text-xs mt-0.5 flex-shrink-0">[{i + 1}]</span>
@@ -2151,14 +2116,19 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
   const [showPapers, setShowPapers] = useState(false)
   const [emailCopied, setEmailCopied] = useState(false)
   const isPhd = student.degree === 'phd'
+
+  // Auto-match first-authored publications from publications list
+  const autoPapers = useMemo(() => getStudentFirstAuthorPapers(student.name), [student.name])
+  // Prefer auto-matched papers, fall back to static papers
+  const displayPapers = autoPapers.length > 0 ? autoPapers : (student.papers || [])
   const degreeClass = isPhd ? 'student-card-phd' : 'student-card-master'
 
   return (
     <motion.div variants={staggerItem}>
       <Card className={`overflow-hidden border-border/60 hover:shadow-lg transition-all duration-300 h-full student-card-accent ${degreeClass}`}>
-        <CardContent className="p-5">
-          <div className="flex items-start gap-4">
-            <div className="w-48 aspect-[3/4] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
+        <CardContent className="p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4">
+            <div className="w-28 sm:w-48 aspect-[3/4] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
               <Image
                 src={publicAsset(student.avatar)}
                 alt={student.name}
@@ -2168,8 +2138,8 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
               />
             </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex-1 min-w-0 w-full sm:w-auto text-center sm:text-left">
+              <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
                 <h4 className="font-semibold text-sm">
                   {student.name}
                   <span className="text-muted-foreground font-normal ml-1.5">({student.nameCn})</span>
@@ -2267,14 +2237,14 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
                 </div>
               )}
 
-              {student.papers && student.papers.length > 0 && (
+              {displayPapers.length > 0 && (
                 <div className="mt-3">
                   <button
                     onClick={() => setShowPapers(!showPapers)}
                     className="flex items-center gap-1.5 text-xs font-medium text-primary/70 hover:text-primary transition-colors"
                   >
                     <BookMarked className="w-3.5 h-3.5" />
-                    {showPapers ? 'Hide' : 'Show'} Papers ({student.papers.length})
+                    {showPapers ? 'Hide' : 'Show'} Papers ({displayPapers.length})
                     {showPapers ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
                   <AnimatePresence>
@@ -2286,7 +2256,7 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
                         className="overflow-hidden"
                       >
                         <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
-                          {student.papers.map((paper, i) => (
+                          {displayPapers.map((paper, i) => (
                             <div key={i} className="text-xs text-muted-foreground leading-relaxed bg-muted/50 rounded-lg p-2">
                               <span className="font-medium text-foreground/70">[{i + 1}]</span>{' '}
                               {paper.citation}
@@ -2398,7 +2368,7 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
   const totalCurrent = useMemo(() => phdStudents.length + masterStudents.length, [])
 
   return (
-    <SectionWrapper id="students" className="dot-pattern">
+    <SectionWrapper id="students" className="dot-pattern pt-2 md:pt-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {!hideTitle && (
           <SectionTitle subtitle="Meet the talented researchers in our group">
@@ -2408,7 +2378,7 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
 
         {/* Member Stats Bar (team page: hideTitle is true) */}
         {hideTitle && (
-          <motion.div variants={fadeInUp} className="mb-8">
+          <motion.div variants={fadeInUp} className="mb-5">
             <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
               <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2">
@@ -2422,8 +2392,8 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
                 </div>
                 <div className="w-px h-8 bg-border/60 hidden sm:block" />
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 flex items-center justify-center">
-                    <GraduationCap className="w-4 h-4 text-emerald-500/60" />
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500/10 to-red-600/5 flex items-center justify-center">
+                    <GraduationCap className="w-4 h-4 text-red-500/60" />
                   </div>
                   <div>
                     <div className="text-lg font-bold tracking-tight">{phdStudents.length}</div>
@@ -2432,12 +2402,22 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
                 </div>
                 <div className="w-px h-8 bg-border/60 hidden sm:block" />
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/10 to-amber-600/5 flex items-center justify-center">
-                    <BookOpen className="w-4 h-4 text-amber-500/60" />
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 flex items-center justify-center">
+                    <BookOpen className="w-4 h-4 text-emerald-500/60" />
                   </div>
                   <div>
                     <div className="text-lg font-bold tracking-tight">{masterStudents.length}</div>
                     <div className="text-[10px] text-muted-foreground">Master Students</div>
+                  </div>
+                </div>
+                <div className="w-px h-8 bg-border/60 hidden sm:block" />
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500/10 to-amber-600/5 flex items-center justify-center">
+                    <Award className="w-4 h-4 text-amber-500/60" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold tracking-tight">{graduatedPhdStudents.length + graduatedMasterStudents.length}</div>
+                    <div className="text-[10px] text-muted-foreground">Alumni</div>
                   </div>
                 </div>
               </div>
@@ -2635,7 +2615,7 @@ function TeachingSection({ hideTitle = false, hideStats = false }: { hideTitle?:
 
         {/* Course Cards Grid */}
         <motion.div variants={fadeInUp}>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {teachingData.map((course, i) => {
               const CourseIcon = courseIcons[i % courseIcons.length]
               return (
@@ -2854,6 +2834,11 @@ function Footer({ onNavigate, currentPage }: { onNavigate: (page: PageName) => v
                 <span className="group-hover:translate-x-0.5 transition-transform">Chinese Site</span>
                 <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
+              <a href="https://ieeexplore.ieee.org/author/38493026100" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group">
+                <FileText className="w-3.5 h-3.5 text-primary/40 group-hover:text-primary/70 transition-colors" />
+                <span className="group-hover:translate-x-0.5 transition-transform">IEEE Xplore</span>
+                <ExternalLink className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
               <a href={`mailto:${professorInfo.email}`} className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group">
                 <Mail className="w-3.5 h-3.5 text-primary/40 group-hover:text-primary/70 transition-colors" />
                 <span className="group-hover:translate-x-0.5 transition-transform">{professorInfo.email}</span>
@@ -2965,7 +2950,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {recentPapers.map((paper, i) => (
               <motion.div
                 key={i}
@@ -3132,7 +3117,7 @@ function AlumniSection() {
           Alumni Destinations
         </SectionTitle>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {alumni.map((student, i) => (
             <motion.div key={i} variants={staggerItem}>
               <Card className="border-border/60 hover:shadow-md transition-all duration-300 group overflow-hidden">
@@ -3214,7 +3199,7 @@ function TeamPage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
   return (
     <main>
       <PageHero page="team" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
         {/* Open Positions CTA Banner */}
         <motion.div
           variants={fadeInUp}
@@ -3649,7 +3634,7 @@ export default function Home() {
       </div>
 
       <Footer onNavigate={handleNavigate} currentPage={currentPage} />
-      <MobileBottomNav currentPage={currentPage} onNavigate={handleNavigate} />
+
       <BackToTop />
       <Toast message="Downloaded BibTeX file!" visible={toastVisible} onClose={() => setToastVisible(false)} />
 
