@@ -36,19 +36,50 @@ yarn-error.log*
 # vercel
 .vercel
 
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ==============================
+# Development / Internal files
+# ==============================
 local-*
 .claude
 .z-ai-config
 *.log
 dev.log
 dev.out.log
+server.log
 test
 prompt
 
-server.log
 # Skills directory
 /skills/
+
+# ==============================
+# Project-specific exclusions
+# ==============================
+
+# QA screenshots & analysis files (development only)
+/download/
+
+# Temporary uploads
+/upload/
+
+# Local database
+/db/
+
+# Agent context / working files
+/agent-ctx/
+
+# Internal worklog
+/worklog.md
+
+# Dev server config (Caddy)
+/Caddyfile
+
+# Development examples
+/examples/
+
+# Mini services (if any)
+/mini-services/

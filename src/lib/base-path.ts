@@ -1,31 +1,14 @@
 /**
- * GitHub Pages base path for static export.
- * - Project site: https://<user>.github.io/<repo>/ → "/<repo>"
- * - User/org site: repository named <user>.github.io is served at domain root → ""
+ * Asset path utilities.
  *
- * Set NEXT_PUBLIC_BASE_PATH in CI so client bundles match (see deploy workflow).
- * With `images.unoptimized`, next/image does not apply basePath to src (Next.js issue #68498);
- * use `publicAsset()` for public-folder images in client components.
+ * For Vercel deployment the site is served at the domain root,
+ * so no base-path prefixing is needed — just return the path as-is.
  */
-function normalizeBasePath(segment: string): string {
-  if (!segment || segment === "/") return "";
-  const p = segment.startsWith("/") ? segment : `/${segment}`;
-  return p.replace(/\/$/, "") || "";
-}
-
 export function getBasePath(): string {
-  const pub = process.env.NEXT_PUBLIC_BASE_PATH;
-  if (typeof pub === "string") {
-    return normalizeBasePath(pub);
-  }
-  const repo = process.env.GITHUB_REPOSITORY?.split("/")[1];
-  if (!repo) return "";
-  if (/\.github\.io$/i.test(repo)) return "";
-  return normalizeBasePath(`/${repo}`);
+  return "";
 }
 
-/** Prefix for files in /public when using next/image unoptimized + basePath. */
+/** Prefix for files in /public — currently a no-op for root deployment. */
 export function publicAsset(path: string): string {
-  const p = path.startsWith("/") ? path : `/${path}`;
-  return `${getBasePath()}${p}`;
+  return path.startsWith("/") ? path : `/${path}`;
 }

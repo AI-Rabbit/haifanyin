@@ -5,7 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { getBasePath } from "@/lib/base-path";
 
 const assetBase = getBasePath();
-const siteUrl = "https://haifanyin.github.io";
+// TODO: Replace with your actual Vercel domain, e.g. "https://mcsp-lab.vercel.app"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mcsp-lab.vercel.app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
