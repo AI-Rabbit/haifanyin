@@ -28,12 +28,12 @@ export interface Student {
   degree: "phd" | "master";
   awards?: string[];
   researchTopics: string[];
-  patents?: string[];
   papers?: { citation: string; link?: string }[];
   coSupervised?: string;
   graduated?: boolean;
   destination?: string;
   enrollDate?: string;
+  profileUrl?: string;
   gradDate?: string;
 }
 
@@ -836,7 +836,7 @@ export const graduatedMasterStudents: Student[] = [
     gradDate: "2024-06",
     awards: ['Gold Award of the 7th "Internet+" Competition', 'National first prize of "Challenge Cup"', "Merit Student", "The first prize of the National Undergraduate Electronics Design Contest"],
     researchTopics: ["RIS"],
-    patents: ["CN202110380147.8"],
+
     papers: [
       { citation: 'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE TWC, Dec. 2021.' },
       { citation: 'Z. Wang, L. Tan, H. Yin, K. Wang, X. Pei, and D. Gesbert, "A received power model for reconfigurable intelligent surface and measurement-based validations," IEEE SPAWC 2021, Lucca, Italy. (Invited)' },
@@ -853,7 +853,6 @@ export const graduatedMasterStudents: Student[] = [
     enrollDate: "2019-09",
     gradDate: "2022-06",
     researchTopics: ["RIS"],
-    patents: ["CN201911340791.1", "CN201911340807.9", "CN201911342563.8"],
     papers: [
       { citation: 'Y. Cui, H. Yin, "Channel estimation for RIS-aided mmWave communications via 3D positioning," IEEE ICCC 2021 Workshops, Xiamen, China, Jul. 2021.' },
       { citation: 'Y. Cui, H. Yin, L. Tan, and M. Di Renzo, "A 3D positioning-based channel estimation method for RIS-aided mmWave communications," arXiv:2203.14636, Apr. 2022.', link: "https://arxiv.org/abs/2203.14636" },
@@ -870,7 +869,6 @@ export const graduatedMasterStudents: Student[] = [
     enrollDate: "2020-09",
     gradDate: "2023-06",
     researchTopics: ["RIS"],
-    patents: ["CN202110155767.1"],
     papers: [
       { citation: 'J. Hu, H. Yin, E. Björnson, "MmWave MIMO communication with semi-passive RIS: A low-complexity channel estimation scheme," IEEE GLOBECOM 2021, Madrid, Spain, Dec. 2021.' },
       { citation: 'J. Hu, H. Yin, L. Tan, L. Cao, and X. Pei, "RIS-aided wireless communications: Can RIS beat metal plate?" arXiv:2303.02938, Mar. 2023.', link: "https://arxiv.org/abs/2303.02938" },
@@ -887,7 +885,6 @@ export const graduatedMasterStudents: Student[] = [
     enrollDate: "2020-09",
     gradDate: "2022-06",
     researchTopics: ["RIS"],
-    patents: ["CN202110002115.4", "CN202110002114.X"],
     papers: [
       { citation: 'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE TWC, Dec. 2021.' },
     ],
@@ -933,10 +930,10 @@ export const phdStudents: Student[] = [
     email: "pei@hust.edu.cn",
     avatar: "/avatars/xilong-pei.jpg",
     degree: "phd",
-    enrollDate: "2020-09",
+    enrollDate: "2021-09",
     awards: ['Gold Award of the 7th "Internet+" Competition', 'National first prize of "Challenge Cup"', "Merit Student", "The first prize of the National Undergraduate Electronics Design Contest"],
     researchTopics: ["RIS"],
-    patents: ["CN202110380307", "CN202110380200.4"],
+    profileUrl: "https://ai-rabbit.github.io/",
     papers: [
       { citation: 'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE TWC, vol. 69, no. 12, pp. 8627-8640, Dec. 2021.' },
       { citation: 'Z. Wang, L. Tan, H. Yin, K. Wang, X. Pei, and D. Gesbert, "A received power model for reconfigurable intelligent surface and measurement-based validations," IEEE SPAWC 2021, Lucca, Italy. (Invited)' },
@@ -951,7 +948,7 @@ export const phdStudents: Student[] = [
     email: "caoyandi@hust.edu.cn",
     avatar: "/avatars/yandi-cao.jpg",
     degree: "phd",
-    enrollDate: "2021-09",
+    enrollDate: "2020-09",
     researchTopics: ["Massive MIMO"],
     papers: [
       { citation: 'Z. Qin, H. Yin, Y. Cao, W. Li, and D. Gesbert, "A partial reciprocity-based channel prediction framework for FDD massive MIMO with high mobility," IEEE TWC, vol. 21, no. 11, Nov. 2022' },
@@ -966,10 +963,9 @@ export const phdStudents: Student[] = [
     email: "caolin@hust.edu.cn",
     avatar: "/avatars/lin-cao.jpg",
     degree: "phd",
-    enrollDate: "2021-09",
+    enrollDate: "2020-09",
     awards: ["Special Prize of Electronic Design Competition for College Students in Hubei Province", "Prize of National College Students' IC Design Competition"],
     researchTopics: ["RIS"],
-    patents: ["CN202110380371.7", "CN202110380140.6"],
     papers: [
       { citation: 'X. Pei, H. Yin, L. Tan, L. Cao, Z. Li, K. Wang, K. Zhang, and E. Björnson, "RIS-aided wireless communications: Prototyping, adaptive beamforming, and indoor/outdoor field trials," IEEE TWC, Dec. 2021.' },
       { citation: 'J. Hu, H. Yin, L. Tan, L. Cao, and X. Pei, "RIS-aided wireless communications: Can RIS beat metal plate?" arXiv:2303.02938, Mar. 2023.', link: "https://arxiv.org/abs/2303.02938" },
@@ -986,7 +982,6 @@ export const phdStudents: Student[] = [
     enrollDate: "2021-09",
     awards: ['Gold Award of the 7th "Internet+" Competition', 'National first prize of "Challenge Cup"'],
     researchTopics: ["Superdirective antenna theory"],
-    patents: ["CN202210417431.2"],
     papers: [
       { citation: 'L. Han, H. Yin, and T. L. Marzetta, "Coupling matrix-based beamforming for superdirective antenna arrays," IEEE ICC 2022, Seoul, South Korea, May 2022.' },
       { citation: 'L. Han, H. Yin, M. Gao, J. Xie, "A superdirective beamforming approach with impedance coupling and field coupling for compact antenna arrays," arXiv:2302.08203, Feb. 2023.', link: "https://arxiv.org/abs/2302.08203" },
@@ -1001,13 +996,23 @@ export const phdStudents: Student[] = [
     email: "mengyinggao12@gmail.com",
     avatar: "/avatars/mengying-gao.jpg",
     degree: "phd",
-    enrollDate: "2023-09",
+    enrollDate: "2021-09",
     awards: ['Gold Award of the 7th "Internet+" Competition', 'National first prize of "Challenge Cup"', "Merit Student", "Honours degrees"],
     researchTopics: ["Superdirective antenna theory"],
     papers: [
       { citation: 'L. Han, H. Yin, M. Gao, J. Xie, "A superdirective beamforming approach with impedance coupling and field coupling for compact antenna arrays," arXiv:2302.08203, Feb. 2023.', link: "https://arxiv.org/abs/2302.08203" },
       { citation: 'M. Gao, H. Yin, and L. Han, "An EEP-based robust beamforming approach for superdirective antenna arrays and experimental validations," arXiv:2308.11934, Aug. 2023.', link: "https://arxiv.org/abs/2308.11934" },
     ],
+  },
+  {
+    name: "Jindiao Huang",
+    nameCn: "黄金雕",
+    email: "jindiaohuang@hust.edu.cn",
+    avatar: "/avatars/jindiao-huang.jpg",
+    degree: "phd",
+    enrollDate: "2023-09",
+    awards: ["National Scholarship (2022)", "National Scholarship (2025)"],
+    researchTopics: ["Signal processing", "Channel estimation", "Holographic communications"],
   },
 ];
 

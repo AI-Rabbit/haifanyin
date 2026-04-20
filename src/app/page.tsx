@@ -476,26 +476,6 @@ function PubStatsBar() {
             Google Scholar
           </a>
         </div>
-
-        {/* Patent Breakdown Row */}
-        <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border/40">
-          <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium flex items-center gap-1">
-            <Award className="w-3 h-3" />
-            Patents
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {[
-              { label: 'China', count: patentBreakdown.china, color: 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800/30' },
-              { label: 'US', count: patentBreakdown.us, color: 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-800/30' },
-              { label: 'European', count: patentBreakdown.european, color: 'bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800/30' },
-              { label: 'PCT', count: patentBreakdown.pct, color: 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800/30' },
-            ].map(pt => (
-              <Badge key={pt.label} variant="secondary" className={`text-[10px] ${pt.color} font-medium`}>
-                {pt.label} {pt.count}
-              </Badge>
-            ))}
-          </div>
-        </div>
       </div>
     </motion.div>
   )
@@ -684,7 +664,6 @@ function getHighlightBadge(highlight: string): { icon: React.ComponentType<{ cla
 function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { currentPage: PageName; darkMode: boolean; toggleDarkMode: () => void; onNavigate: (page: PageName) => void }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState<string | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
@@ -696,32 +675,6 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  // Scroll spy for home page sections
-  useEffect(() => {
-    if (currentPage !== 'home') return
-    const sectionIds = ['home', 'about', 'recent-pubs', 'teaching', 'news', 'alumni', 'quote']
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
-        }
-      },
-      { threshold: 0.3 }
-    )
-    const timer = setTimeout(() => {
-      sectionIds.forEach((id) => {
-        const el = document.getElementById(id)
-        if (el) observer.observe(el)
-      })
-    }, 100)
-    return () => {
-      clearTimeout(timer)
-      observer.disconnect()
-    }
-  }, [currentPage])
 
   const navItems: { id: PageName; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: 'home', label: 'Home', icon: HomeIcon },
@@ -780,15 +733,6 @@ function Navigation({ currentPage, darkMode, toggleDarkMode, onNavigate }: { cur
                     layoutId="activeNav"
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary"
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                  />
-                )}
-                {/* Scroll spy dot for home page */}
-                {item.id === 'home' && currentPage === 'home' && activeSection && activeSection !== 'home' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -2 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary/50"
-                    title={`Section: ${activeSection}`}
                   />
                 )}
               </button>
@@ -1267,13 +1211,7 @@ function TimelineItem({ period, title, subtitle, isLast = false, Icon }: { perio
   return (
     <div className="flex gap-4">
       <div className="flex flex-col items-center">
-        {Icon ? (
-          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <Icon className="w-3.5 h-3.5 text-primary/60" />
-          </div>
-        ) : (
-          <div className="w-3 h-3 rounded-full bg-primary/20 border-2 border-primary/40 mt-1.5 flex-shrink-0" />
-        )}
+        <div className="w-3 h-3 rounded-full bg-primary/20 border-2 border-primary/40 mt-1.5 flex-shrink-0" />
         {!isLast && <div className="w-px flex-1 bg-border mt-1.5" />}
       </div>
       <div className="pb-6">
@@ -2217,15 +2155,15 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
 
   return (
     <motion.div variants={staggerItem}>
-      <Card className={`overflow-hidden border-border/60 hover:shadow-lg transition-all duration-300 h-full student-card-accent ${degreeClass} student-card-hover card-shimmer`}>
+      <Card className={`overflow-hidden border-border/60 hover:shadow-lg transition-all duration-300 h-full student-card-accent ${degreeClass}`}>
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
-            <div className="w-20 aspect-[3/4] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
+            <div className="w-48 aspect-[3/4] rounded-xl overflow-hidden border border-primary/10 flex-shrink-0">
               <Image
                 src={publicAsset(student.avatar)}
                 alt={student.name}
-                width={80}
-                height={106}
+                width={192}
+                height={256}
                 className="w-full h-full object-cover student-avatar-img"
               />
             </div>
@@ -2294,7 +2232,7 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
               </div>
 
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {student.researchTopics.slice(0, 3).map((topic) => {
+                {student.researchTopics.map((topic) => {
                   const topicKey = Object.keys(topicGradientMap).find(k => topic.toLowerCase().includes(k.replace(/-/g, ' ').split(' ')[0]) || topic.toLowerCase().includes('fdd') && k === 'fdd-mimo' || topic.toLowerCase().includes('ris') && k === 'ris' || topic.toLowerCase().includes('massive') && k === 'massive-mimo' || topic.toLowerCase().includes('superdirective') && k === 'superdirective' || topic.toLowerCase().includes('channel') && k === 'channel-prediction' || topic.toLowerCase().includes('holographic') && k === 'holographic')
                   const gradientColors: Record<string, string> = {
                     blue: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/15 dark:text-blue-400 dark:border-blue-800/25',
@@ -2316,32 +2254,16 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
                     </Badge>
                   )
                 })}
-                {student.researchTopics.length > 3 && (
-                  <Badge variant="secondary" className="text-[10px] px-2 py-0 bg-muted text-muted-foreground border-border/60">
-                    +{student.researchTopics.length - 3} more
-                  </Badge>
-                )}
               </div>
-
-              {/* Patent count */}
-              {student.patents && student.patents.length > 0 && (
-                <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400">
-                  <Award className="w-3 h-3" />
-                  <span>{student.patents.length} patent{student.patents.length > 1 ? 's' : ''}</span>
-                </div>
-              )}
 
               {student.awards && student.awards.length > 0 && (
                 <div className="mt-2.5 space-y-1">
-                  {student.awards.slice(0, 2).map((award, i) => (
+                  {student.awards.map((award, i) => (
                     <div key={i} className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-400">
                       <Award className="w-3 h-3 mt-0.5 flex-shrink-0" />
-                      <span>{award.length > 50 ? award.slice(0, 50) + '...' : award}</span>
+                      <span>{award}</span>
                     </div>
                   ))}
-                  {student.awards.length > 2 && (
-                    <span className="text-xs text-muted-foreground ml-4">+{student.awards.length - 2} more</span>
-                  )}
                 </div>
               )}
 
@@ -2382,10 +2304,22 @@ function StudentCard({ student, onNavigate }: { student: Student; onNavigate?: (
 
               {/* View Profile link */}
               <div className="mt-3 pt-2 border-t border-border/30">
-                <span className="text-[11px] text-primary/50 font-medium flex items-center gap-1 cursor-default">
-                  <ArrowRight className="w-3 h-3" />
-                  View Profile
-                </span>
+                {student.profileUrl ? (
+                  <a
+                    href={student.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-primary/70 hover:text-primary font-medium flex items-center gap-1 transition-colors"
+                  >
+                    <ArrowRight className="w-3 h-3" />
+                    View Profile
+                  </a>
+                ) : (
+                  <span className="text-[11px] text-primary/50 font-medium flex items-center gap-1 cursor-default">
+                    <ArrowRight className="w-3 h-3" />
+                    View Profile
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -2660,7 +2594,7 @@ function StudentsSection({ hideTitle = false }: { hideTitle?: boolean } = {}) {
 }
 
 // ============ Teaching Section ============
-function TeachingSection({ hideTitle }: { hideTitle?: boolean } = {}) {
+function TeachingSection({ hideTitle = false, hideStats = false }: { hideTitle?: boolean; hideStats?: boolean } = {}) {
   const teachingData = professorInfo.teaching || []
   const courseIcons = [BookOpen, Braces, Library, Microscope]
 
@@ -2674,6 +2608,7 @@ function TeachingSection({ hideTitle }: { hideTitle?: boolean } = {}) {
         )}
 
         {/* Stats Highlight Strip */}
+        {!hideStats && (
         <motion.div variants={fadeInUp} className="mb-8">
           <div className="bg-card rounded-xl border border-border/60 p-4 shadow-sm">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -2696,6 +2631,7 @@ function TeachingSection({ hideTitle }: { hideTitle?: boolean } = {}) {
             </div>
           </div>
         </motion.div>
+        )}
 
         {/* Course Cards Grid */}
         <motion.div variants={fadeInUp}>
@@ -2737,6 +2673,7 @@ function TeachingSection({ hideTitle }: { hideTitle?: boolean } = {}) {
 // ============ Quote Banner ============
 function QuoteBanner() {
   const quotes = [
+    { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" },
     { text: "Innovation is the ability to see change as an opportunity — not a threat.", author: "Steve Jobs" },
     { text: "The best way to predict the future is to invent it.", author: "Alan Kay" },
     { text: "Research is to see what everybody else has seen, and to think what nobody else has thought.", author: "Albert Szent-Györgyi" },
@@ -2751,24 +2688,24 @@ function QuoteBanner() {
   }, [quotes.length])
 
   return (
-    <SectionWrapper id="quote" className="relative overflow-hidden">
+    <SectionWrapper id="quote" className="relative overflow-hidden !py-10 md:!py-14">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuote}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.4 }}
           >
-            <Quote className="w-8 h-8 text-primary/20 mx-auto mb-4" />
-            <blockquote className="text-lg md:text-xl font-light leading-relaxed text-foreground/80 italic">
+            <Quote className="w-5 h-5 text-primary/15 mx-auto mb-2" />
+            <blockquote className="text-sm md:text-base font-light leading-relaxed text-foreground/70 italic">
               &ldquo;{quotes[currentQuote].text}&rdquo;
             </blockquote>
-            <p className="text-sm text-muted-foreground mt-3">— {quotes[currentQuote].author}</p>
+            <p className="text-xs text-muted-foreground mt-1.5">— {quotes[currentQuote].author}</p>
 
             {/* Navigation Dots */}
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center gap-2 mt-3">
               {quotes.map((_, idx) => (
                 <button
                   key={idx}
@@ -3011,9 +2948,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
     <main>
       <HeroSection onNavigate={onNavigate} />
 
-      {/* Key Highlights Metrics Ribbon */}
-      <KeyHighlightsRibbon />
-
       <SectionDivider />
       <AboutSection />
       <SectionDivider flip />
@@ -3068,61 +3002,6 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageName) => void }) {
 
       <SectionDivider />
       <NewsSection />
-      <AlumniSection />
-
-      {/* Recently Joined Members */}
-      <SectionWrapper id="recent-joined" className="bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <SectionTitle accent="blue" subtitle="Newest members of our research group">Recently Joined</SectionTitle>
-            <button
-              onClick={() => onNavigate('team')}
-              className="hidden sm:flex items-center gap-1 text-sm font-medium text-primary/70 hover:text-primary transition-colors group"
-            >
-              View All
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...phdStudents, ...masterStudents]
-              .sort((a, b) => (b.enrollDate || '').localeCompare(a.enrollDate || ''))
-              .slice(0, 3)
-              .map((student) => (
-                <motion.div
-                  key={student.name}
-                  variants={staggerItem}
-                  onClick={() => onNavigate('team')}
-                  className="bg-card rounded-xl border border-border/60 p-4 hover:shadow-md hover:border-primary/20 transition-all duration-300 cursor-pointer group flex items-center gap-4"
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center flex-shrink-0 text-primary font-semibold text-sm">
-                    {student.name.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold truncate group-hover:text-primary/80 transition-colors">{student.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{student.nameCn}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className={`text-[10px] ${student.degree?.toLowerCase().includes('phd') ? 'bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-900/15 dark:text-violet-400 dark:border-violet-800/25' : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/15 dark:text-emerald-400 dark:border-emerald-800/25'}`}>
-                        {student.degree}
-                      </Badge>
-                      {student.enrollDate && (
-                        <span className="text-[10px] text-muted-foreground/60 tabular-nums">Since {student.enrollDate}</span>
-                      )}
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
-                </motion.div>
-              ))}
-          </div>
-          <button
-            onClick={() => onNavigate('team')}
-            className="sm:hidden mt-4 flex items-center gap-1 text-sm font-medium text-primary/70 hover:text-primary transition-colors mx-auto"
-          >
-            View All Members
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </SectionWrapper>
-
       <SectionDivider flip />
       <QuoteBanner />
     </main>
@@ -3191,9 +3070,9 @@ function NewsSection() {
               )}
             </div>
 
-            {/* Right: Timeline */}
-            <div className="relative">
-              <div className="absolute left-[18px] top-2 bottom-2 w-px bg-border/60" />
+            {/* Right: Timeline with scrollbar */}
+            <div className="max-h-[380px] overflow-y-auto custom-scrollbar pr-2 relative">
+              <div className="absolute left-[18px] top-0 bottom-0 w-px bg-border/60" />
               <div className="space-y-1">
                 {newsItems.map((item, i) => (
                   <motion.div
@@ -3384,7 +3263,7 @@ function TeachingPage({ onNavigate }: { onNavigate: (page: PageName) => void }) 
   return (
     <main>
       <PageHero page="teaching" />
-      <TeachingSection hideTitle />
+      <TeachingSection hideTitle hideStats />
     </main>
   )
 }
